@@ -1,0 +1,61 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Microsoft.Office.Interop.Excel;
+namespace 命令行测试代码
+{
+	class Program
+	{
+		static void Main(string[] args)
+		{
+			try
+			{
+				Application app = new Application();
+				//功率曲线
+				double[,] arr = {{3,54},{4,149},{5,296},{6,515},{7,819},{8	,1218 },{9	,1693 },{10	,2200 },{10.5,2500},
+								{11	,2500 },{12	,2500 },{13	,2500 },{14	,2500 },{15	,2500 },{16	,2500 },{17	,2500 },
+								{18	,2500 },{19	,2500 },{20	,2500 },{21	,2500 },{22	,2500 },{23	,2500 },{24	,2500 },{25	,2500 }
+							};
+				double[] up_arr = new double[23];
+				double[] down_arr = new double[23];
+				//获取风速区间
+				for (int i = 0; i < up_arr.Length; i++)
+				{
+					if (i == up_arr.Length - 1)
+					{
+						
+						up_arr[i] = arr[i, 0] + (arr[i, 0] - arr[i - 1, 0]) / 2.0;
+						down_arr[i] = arr[i, 0] - (arr[i, 0] - arr[i - 1, 0]) / 2.0;
+					}
+					else
+					{
+						up_arr[i] = arr[i, 0] + (arr[i + 1, 0] - arr[i, 0]) / 2.0;
+						down_arr[i] = arr[i, 0] - (arr[i + 1, 0] - arr[i, 0]) / 2.0;
+					}
+				}
+
+				//韦伯分布
+				double[] webull_arr = new double[arr.Length];
+				double sum = 0;
+				double a = 0;
+				double b = 0;
+				for (int i = 0; i < up_arr.Length; i++)
+				{
+					a = app.WorksheetFunction.Weibull(up_arr[i], 1, 1, true);
+					b = app.WorksheetFunction.Weibull(down_arr[i], 1, 1, true);
+					webull_arr[i] = arr[i, 1] * (a-b) * 8760;
+					sum += webull_arr[i];
+				}
+
+				Console.WriteLine(sum);
+				Console.ReadLine();
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+			
+		}
+	}
+}
