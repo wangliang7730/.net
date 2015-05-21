@@ -46,8 +46,8 @@ namespace 命令行测试代码
 				double b = 0;
 				for (int i = 0; i < up_arr.Length; i++)
 				{
-					a = app.WorksheetFunction.Weibull(up_arr[i], 1, 1, true); //参数1,区间 ,参数2,A值,参数3,K值,参数4
-					b = app.WorksheetFunction.Weibull(down_arr[i], 1, 1, true);
+					a = app.WorksheetFunction.Weibull(up_arr[i], 2, 7, true); //参数1,区间 ,参数2,K值,参数3,A值,参数4
+					b = app.WorksheetFunction.Weibull(down_arr[i], 2, 7, true);
 					webull_arr[i] = arr[i, 1] * (a-b) * 8760;
 					sum += webull_arr[i];
 				}
